@@ -1,14 +1,18 @@
 const router = require('express').Router();
 
 const {
-	getRecipes,
+	// getRecipes,
+	getRecipeByName,
 	createRecipe,
 	deleteRecipe,
 	updateRecipe,
 } = require('../../controllers/recipeController');
 
-// /api/recipes
-router.route('/').get(getRecipes).post(createRecipe);
+// /api/recipes  (GETS ALL RECIPES)
+// router.route('/').get(getRecipes);
+
+// /api/recipes (GETS RECIPES BY NAME)
+router.route('/').post(createRecipe).get(getRecipeByName);
 
 router.route('/:recipeId').delete(deleteRecipe).put(updateRecipe);
 

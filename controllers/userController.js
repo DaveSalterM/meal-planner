@@ -13,6 +13,20 @@ module.exports = {
 		}
 	},
 
+	async getOneUser(req, res) {
+		try {
+			// the userId params must be a 24 character hex string, 12 byte Uint8Array, or an integer
+			const user = await User.findOne({ _id: req.params.userId });
+			if (!user) {
+				return res.status(404).json({ msg: 'no such User' });
+			}
+			res.json(user);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json(error);
+		}
+	},
+
 	async createUser(req, res) {
 		try {
 			const userData = await User.create({
