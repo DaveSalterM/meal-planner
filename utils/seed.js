@@ -11,6 +11,14 @@ connection.once('open', async () => {
 		await connection.dropCollection('users');
 	}
 
+	let recipeCheck = await connection.db
+		.listCollections({ name: 'recipes' })
+		.toArray();
+	if (userCheck.length) {
+		await connection.dropCollection('recipes');
+	}
+
+	// User seed data
 	await User.create({ username: 'User1', password: 'password1' }).then((data) =>
 		console.log(data)
 	);
@@ -22,6 +30,8 @@ connection.once('open', async () => {
 	await User.create({ username: 'User3', password: 'password3' }).then((data) =>
 		console.log(data)
 	);
+
+	// Recipe seed data
 
 	console.info('Seeding complete! 🌱');
 	process.exit(0);
