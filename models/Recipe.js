@@ -12,6 +12,7 @@ const recipeSchema = new Schema({
 		default: 0,
 	},
 	user: { type: Schema.Types.ObjectId, ref: 'user' },
+	reviews: [{ type: Schema.Types.ObjectId, ref: 'review' }],
 });
 
 const Recipe = model('recipe', recipeSchema);

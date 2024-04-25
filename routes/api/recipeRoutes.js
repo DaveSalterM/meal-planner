@@ -3,6 +3,7 @@ const router = require('express').Router();
 const {
 	// getRecipes,
 	getRecipeByName,
+	getOneRecipe,
 	createRecipe,
 	deleteRecipe,
 	updateRecipe,
@@ -17,6 +18,7 @@ router.route('/').post(tokenAuth, createRecipe).get(getRecipeByName);
 
 router
 	.route('/:recipeId')
+	.get(getOneRecipe)
 	.delete(tokenAuth, deleteRecipe)
 	.put(tokenAuth, updateRecipe);
 
