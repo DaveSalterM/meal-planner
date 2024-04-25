@@ -14,7 +14,7 @@ const userSchema = new Schema({
 		required: true,
 		max_length: 30,
 	},
-	// recipes: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
+	recipes: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
 	meal_plan: [],
 	shopping_list: [],
 	// reviews: [{ type: Schema.Types.ObjectId, ref: 'reviews' }],
@@ -32,6 +32,6 @@ userSchema.pre('save', async function (next) {
 	}
 });
 
-const User = model('users', userSchema);
+const User = model('user', userSchema);
 
 module.exports = User;

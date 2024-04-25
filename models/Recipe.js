@@ -14,6 +14,6 @@ const recipeSchema = new Schema({
 	user: { type: Schema.Types.ObjectId, ref: 'user' },
 });
 
-const Recipe = model('recipes', recipeSchema);
+const Recipe = model('recipe', recipeSchema);
 
 module.exports = Recipe;
