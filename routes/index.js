@@ -8,8 +8,8 @@ router.use('/api', apiRoutes);
 // Test a protected route to check if the user is logged in
 router.get('/protected', (req, res) => {
 	console.log(req.headers);
-	// const token = req.headers?.authorization?.split(' ')[1];
-	const token = req.headers?.authorization?.split(' ')[0];
+	const token = req.headers?.authorization?.split(' ')[1];
+	// const token = req.headers?.authorization?.split(' ')[0];
 	console.log('==============================');
 	console.log(token);
 

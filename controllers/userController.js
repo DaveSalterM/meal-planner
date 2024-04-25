@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Recipe } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -16,10 +16,15 @@ module.exports = {
 	async getOneUser(req, res) {
 		try {
 			// the userId params must be a 24 character hex string, 12 byte Uint8Array, or an integer
-			const user = await User.findOne({ _id: req.params.userId });
+			const user = await User.findOne({ _id: req.params.userId }).populate(
+				'recipes'
+			);
 			if (!user) {
 				return res.status(404).json({ msg: 'no such User' });
 			}
+
+			// const userRecipes = await Recipe.find({ user: user._id });
+			// res.json({ user, userRecipes });
 			res.json(user);
 		} catch (error) {
 			console.log(error);
@@ -40,6 +45,7 @@ module.exports = {
 		}
 	},
 
+	// Login route
 	async authenticateUser(req, res) {
 		try {
 			const user = await User.findOne({ username: req.body.username });

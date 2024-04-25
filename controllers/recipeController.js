@@ -1,4 +1,6 @@
-const { Recipe } = require('../models');
+const { Recipe, User } = require('../models');
+// const jwt = require('jsonwebtoken');
+// const tokenAuth = require('../middleware/tokenAuth');
 
 module.exports = {
 	async getRecipes(req, res) {
@@ -14,7 +16,7 @@ module.exports = {
 		try {
 			const recipe = await Recipe.find({
 				name: { $regex: req.body.name, $options: 'i' },
-			});
+			}).populate('user');
 			if (!recipe) {
 				return res.status(404).json({ msg: 'no such recipe' });
 			}
@@ -32,6 +34,19 @@ module.exports = {
 				calories: req.body.calories,
 				user: req.body.userId,
 			});
+
+			const userData = await User.findOneAndUpdate(
+				{ _id: req.user.id },
+				{ $addToSet: { recipes: recipeData._id } },
+				{ new: true }
+			);
+
+			if (!userData) {
+				return res.status(404).json({
+					message: 'Recipe created, but found no user with that ID',
+				});
+			}
+
 			res.status(201).json(recipeData);
 		} catch (error) {
 			console.log(error);
@@ -64,8 +79,22 @@ module.exports = {
 				_id: req.params.recipeId,
 			});
 
+			const userData = await User.findOneAndUpdate(
+				{
+					_id: req.user.id,
+				},
+				{ $pull: { recipes: recipe._id } },
+				{ new: true }
+			);
+
 			if (!recipe) {
 				return res.status(404).json({ message: 'This recipe does not exist!' });
+			}
+
+			if (!userData) {
+				return res.status(404).json({
+					message: 'Recipe delete, but found no user with that ID',
+				});
 			}
 			res.json(recipe);
 		} catch (error) {
