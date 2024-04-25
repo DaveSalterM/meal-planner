@@ -12,14 +12,39 @@ module.exports = {
 			res.status(500).json(error);
 		}
 	},
+	// Change this so that the word is found in the parameters instead of the body?
 	async getRecipeByName(req, res) {
 		try {
 			const recipe = await Recipe.find({
 				name: { $regex: req.body.name, $options: 'i' },
-			}).populate('user');
+			}).populate({
+				path: 'user',
+				select: 'username',
+			});
 			if (!recipe) {
 				return res.status(404).json({ msg: 'no such recipe' });
 			}
+			res.json(recipe);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json(error);
+		}
+	},
+	async getOneRecipe(req, res) {
+		try {
+			const recipe = await Recipe.findOne({
+				_id: req.params.recipeId,
+			}).populate([
+				{
+					path: 'user',
+					select: 'username',
+				},
+				{
+					path: 'reviews',
+					select: ['_id', 'content', 'user'],
+					populate: { path: 'user', select: ['_id', 'username'] },
+				},
+			]);
 			res.json(recipe);
 		} catch (error) {
 			console.log(error);
@@ -32,7 +57,7 @@ module.exports = {
 				name: req.body.name,
 				ingredients: req.body.ingredients,
 				calories: req.body.calories,
-				user: req.body.userId,
+				user: req.user.id,
 			});
 
 			const userData = await User.findOneAndUpdate(
