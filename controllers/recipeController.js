@@ -127,4 +127,11 @@ module.exports = {
 			res.status(500).json(error);
 		}
 	},
+	// async favoriteRecipe(req,res){
+	// 	try {
+	// 		const data = await Recipe.findOne
+	// 	} catch (error) {
+
+	// 	}
+	// }
 };
