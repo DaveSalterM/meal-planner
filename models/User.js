@@ -18,6 +18,7 @@ const userSchema = new Schema({
 	meal_plan: [],
 	shopping_list: [],
 	reviews: [{ type: Schema.Types.ObjectId, ref: 'reviews' }],
+	favorites: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
 });
 
 userSchema.pre('save', async function (next) {

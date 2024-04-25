@@ -72,4 +72,31 @@ module.exports = {
 			res.status(500).json({ msg: error });
 		}
 	},
+	async favoriteRecipe(req, res) {
+		try {
+			const data = await User.findOneAndUpdate(
+				{ _id: req.user.id },
+				{ $addToSet: { favorites: req.body.recipeId } },
+				{ new: true }
+			);
+
+			res.json(data);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ msg: error });
+		}
+	},
+	async unfavoriteRecipe(req, res) {
+		try {
+			const data = await User.findOneAndUpdate(
+				{ _id: req.user.id },
+				{ $pull: { favorites: req.body.recipeId } },
+				{ new: true }
+			);
+			res.json(data);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ msg: error });
+		}
+	},
 };
