@@ -32,6 +32,7 @@ module.exports = {
 		}
 	},
 
+	// Create a new user
 	async createUser(req, res) {
 		try {
 			const userData = await User.create({
@@ -69,9 +70,10 @@ module.exports = {
 			res.json({ token });
 		} catch (error) {
 			console.log(error);
-			res.status(500).json({ msg: error });
+			res.status(500).json({ msg: 'error' });
 		}
 	},
+
 	async favoriteRecipe(req, res) {
 		try {
 			const data = await User.findOneAndUpdate(
