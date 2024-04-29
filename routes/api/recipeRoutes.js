@@ -14,7 +14,7 @@ const tokenAuth = require('../../middleware/tokenAuth');
 // router.route('/').get(getRecipes);
 
 // /api/recipes (GETS RECIPES BY NAME)
-router.route('/').post(tokenAuth, createRecipe).get(getRecipeByName);
+router.route('/').post(createRecipe).get(getRecipeByName);
 
 router
 	.route('/:recipeId')
