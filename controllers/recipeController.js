@@ -56,6 +56,7 @@ module.exports = {
 			const recipeData = await Recipe.create({
 				name: req.body.name,
 				ingredients: req.body.ingredients,
+				instructions: req.body.instructions,
 				calories: req.body.calories,
 				user: req.user.id,
 			});
