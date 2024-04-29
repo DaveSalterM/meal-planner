@@ -5,7 +5,7 @@ const tokenAuth = (req, res, next) => {
 		const token = req.headers?.authorization?.split(' ')[1];
 		const loggedInUser = jwt.verify(token, process.env.TOKEN_SECRET);
 		req.user = loggedInUser;
-		console.log(req.user);
+		// console.log(req.user);
 		next();
 	} catch (error) {
 		console.log(error);
