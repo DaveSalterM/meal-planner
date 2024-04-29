@@ -4,7 +4,7 @@ const { Schema, model } = require('mongoose');
 const recipeSchema = new Schema({
 	name: {
 		type: String,
-		// required: true,
+		required: true,
 		max_length: 100,
 	},
 	ingredients: { type: Array, default: [] },
