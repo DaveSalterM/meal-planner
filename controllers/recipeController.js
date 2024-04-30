@@ -16,7 +16,7 @@ module.exports = {
 	async getRecipeByName(req, res) {
 		try {
 			const recipe = await Recipe.find({
-				name: { $regex: req.body.name, $options: 'i' },
+				name: { $regex: req.params.recipe, $options: 'i' },
 			}).populate({
 				path: 'user',
 				select: 'username',
@@ -58,6 +58,7 @@ module.exports = {
 				ingredients: req.body.ingredients,
 				instructions: req.body.instructions,
 				calories: req.body.calories,
+				servings: req.body.servings,
 				imgUrl: req.body.imgUrl,
 				user: req.user.id,
 			});
@@ -87,7 +88,10 @@ module.exports = {
 				{
 					name: req.body.name,
 					ingredients: req.body.ingredients,
+					instructions: req.body.instructions,
 					calories: req.body.calories,
+					servings: req.body.servings,
+					imgUrl: req.body.imgUrl,
 				},
 				{ runValidators: true, new: true }
 			);
