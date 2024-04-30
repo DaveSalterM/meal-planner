@@ -58,6 +58,7 @@ module.exports = {
 				ingredients: req.body.ingredients,
 				instructions: req.body.instructions,
 				calories: req.body.calories,
+				imgUrl: req.body.imgUrl,
 				user: req.user.id,
 			});
 
