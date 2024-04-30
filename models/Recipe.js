@@ -15,6 +15,7 @@ const recipeSchema = new Schema({
 	},
 	user: { type: Schema.Types.ObjectId, ref: 'user' },
 	reviews: [{ type: Schema.Types.ObjectId, ref: 'review' }],
+	servings: { type: Number, default: 1 },
 	imgUrl: {
 		type: String,
 		default:
