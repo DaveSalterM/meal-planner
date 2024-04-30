@@ -17,7 +17,7 @@ const userSchema = new Schema({
 	recipes: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
 	meal_plan: [],
 	shopping_list: [],
-	reviews: [{ type: Schema.Types.ObjectId, ref: 'reviews' }],
+	reviews: [{ type: Schema.Types.ObjectId, ref: 'review' }],
 	favorites: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
 });
 
