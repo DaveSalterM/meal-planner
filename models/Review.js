@@ -8,6 +8,7 @@ const reviewSchema = new Schema({
 	},
 	user: { type: Schema.Types.ObjectId, ref: 'user' },
 	recipe: { type: Schema.Types.ObjectId, ref: 'recipe' },
+	createdAt: { type: Date, default: Date.now },
 });
 
 const Review = model('review', reviewSchema);

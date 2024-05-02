@@ -66,8 +66,8 @@ module.exports = {
 					expiresIn: '2h',
 				}
 			);
-			console.log("User: ", user);
-			res.json({ token, user});
+			// console.log("User: ", user);
+			res.json({ token, user });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ msg: 'error' });
