@@ -39,7 +39,18 @@ module.exports = {
 				username: req.body.username,
 				password: req.body.password,
 			});
-			res.status(201).json(userData);
+
+			const token = jwt.sign(
+				{
+					id: userData.id,
+					username: userData.username,
+				},
+				process.env.TOKEN_SECRET,
+				{
+					expiresIn: '2h',
+				}
+			);
+			res.status(201).json({ token, userData });
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
