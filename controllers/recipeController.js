@@ -41,10 +41,12 @@ module.exports = {
 				},
 				{
 					path: 'reviews',
+					options: { sort: { createdAt: -1 } },
 					select: ['_id', 'content', 'user'],
 					populate: { path: 'user', select: ['_id', 'username'] },
 				},
 			]);
+			// console.log(recipe);
 			res.json(recipe);
 		} catch (error) {
 			console.log(error);

@@ -19,9 +19,13 @@ router.route('/').post(tokenAuth, createRecipe);
 router.route('/:recipe').get(getRecipeByName);
 
 router
-	.route('/:recipeId')
+	.route('/recipe/:recipeId')
 	.get(getOneRecipe)
 	.delete(tokenAuth, deleteRecipe)
 	.put(tokenAuth, updateRecipe);
+// .route('/:recipeId')
+// .get(getOneRecipe)
+// .delete(tokenAuth, deleteRecipe)
+// .put(tokenAuth, updateRecipe);
 
 module.exports = router;
