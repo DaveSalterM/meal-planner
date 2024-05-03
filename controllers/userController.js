@@ -19,7 +19,15 @@ module.exports = {
 			const user = await User.findOne({ _id: req.params.userId })
 				.populate('recipes')
 				.populate('shopping_list')
-				.populate('meal_plan');
+				// .populate('meal_plan');
+				.populate([
+					{
+						path: 'meal_plan',
+						select: 'recipes',
+						populate: { path: 'recipes', select: 'name' },
+					},
+				]);
+
 			if (!user) {
 				return res.status(404).json({ msg: 'no such User' });
 			}
