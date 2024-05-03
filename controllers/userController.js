@@ -18,8 +18,15 @@ module.exports = {
 			// the userId params must be a 24 character hex string, 12 byte Uint8Array, or an integer
 			const user = await User.findOne({ _id: req.params.userId })
 				.populate('recipes')
-				.populate('shopping_list')
+				// .populate('shopping_list')
 				// .populate('meal_plan');
+				.populate([
+					{
+						path: 'shopping_list',
+						select: ['_id', 'name', 'ingredients'],
+					},
+				])
+
 				.populate([
 					{
 						path: 'meal_plan',
@@ -169,9 +176,9 @@ module.exports = {
 	async removeFromMealPlan(req, res) {
 		try {
 			const data = await User.findOneAndUpdate(
-				{ _id: req.user.id },
-				{ $pull: { meal_plan: req.body.recipeId } },
-				{ new: true }
+				{ _id: req.params.userId },
+				{ $pull: { 'meal_plan.$[element].recipes': req.body.recipeId } },
+				{ arrayFilters: [{ 'element.day': req.body.dayOfWeek }], new: true }
 			);
 			res.json(data);
 		} catch (error) {
