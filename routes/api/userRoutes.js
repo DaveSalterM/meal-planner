@@ -7,6 +7,10 @@ const {
 	authenticateUser,
 	favoriteRecipe,
 	unfavoriteRecipe,
+	addToMealPlan,
+	addToShoppingList,
+	removeFromMealPlan,
+	removeFromShoppingList,
 } = require('../../controllers/userController');
 const tokenAuth = require('../../middleware/tokenAuth');
 
@@ -22,5 +26,15 @@ router
 	.delete(tokenAuth, unfavoriteRecipe);
 
 router.route('/login').post(authenticateUser);
+
+router
+	.route('/:userId/mealplan')
+	.post(tokenAuth, addToMealPlan)
+	.delete(tokenAuth, removeFromMealPlan);
+
+router
+	.route('/:userId/shoppinglist')
+	.post(tokenAuth, addToShoppingList)
+	.delete(tokenAuth, removeFromShoppingList);
 
 module.exports = router;
