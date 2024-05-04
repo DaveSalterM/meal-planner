@@ -3,6 +3,7 @@ const router = require('express').Router();
 const {
 	getUsers,
 	getOneUser,
+	getUserFavorites,
 	createUser,
 	authenticateUser,
 	favoriteRecipe,
@@ -22,6 +23,7 @@ router.route('/:userId').get(getOneUser);
 
 router
 	.route('/:userId/favorites')
+	.get(getUserFavorites)
 	.put(tokenAuth, favoriteRecipe)
 	.delete(tokenAuth, unfavoriteRecipe);
 

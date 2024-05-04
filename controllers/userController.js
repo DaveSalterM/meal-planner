@@ -33,6 +33,13 @@ module.exports = {
 						select: 'recipes',
 						populate: { path: 'recipes', select: 'name' },
 					},
+				])
+				.populate([
+					{
+						path: 'favorites',
+						select: ['_id', 'name', 'imgUrl', 'user'],
+						populate: { path: 'user', select: 'username' },
+					},
 				]);
 
 			if (!user) {
@@ -42,6 +49,17 @@ module.exports = {
 			// const userRecipes = await Recipe.find({ user: user._id });
 			// res.json({ user, userRecipes });
 			res.json(user);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json(error);
+		}
+	},
+
+	async getUserFavorites(req, res) {
+		try {
+			const userData = await User.findOne({ _id: req.params.userId });
+			const userFavorites = userData.favorites;
+			res.json(userFavorites);
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
