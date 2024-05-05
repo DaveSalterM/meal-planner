@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const {
-	// getRecipes,
+	getRecipes,
 	getRecipeByName,
 	getOneRecipe,
 	createRecipe,
@@ -11,7 +11,7 @@ const {
 const tokenAuth = require('../../middleware/tokenAuth');
 
 // /api/recipes  (GETS ALL RECIPES)
-// router.route('/').get(getRecipes);
+router.route('/').get(getRecipes);
 
 // /api/recipes (GETS RECIPES BY NAME)
 router.route('/').post(tokenAuth, createRecipe);

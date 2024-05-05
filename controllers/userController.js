@@ -91,6 +91,30 @@ module.exports = {
 		}
 	},
 
+	async updateUser(req, res) {
+		const oldPassword = req.body.oldPassword;
+
+		try {
+			const user = await User.findById(req.params.userId);
+			if (!user) {
+				return res.status(401).json({ message: 'No user with that ID' });
+			}
+
+			const validPassword = bcrypt.compareSync(oldPassword, user.password);
+			if (validPassword) {
+				user.password = req.body.newPassword;
+				await user.save();
+			} else {
+				return res.status(403).json({ msg: 'oldPassword wrong' });
+			}
+
+			res.status(200).json({ msg: 'Password updated!' });
+		} catch (error) {
+			console.log(error);
+			res.status(500).json(error);
+		}
+	},
+
 	// Login route
 	async authenticateUser(req, res) {
 		try {
@@ -127,7 +151,13 @@ module.exports = {
 				{ new: true }
 			);
 
-			res.json(data);
+			const recipeData = await Recipe.findOneAndUpdate(
+				{ _id: req.body.recipeId },
+				{ $addToSet: { userFavorites: data._id } },
+				{ new: true }
+			);
+
+			res.json(recipeData);
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ msg: error });
@@ -140,7 +170,16 @@ module.exports = {
 				{ $pull: { favorites: req.body.recipeId } },
 				{ new: true }
 			);
-			res.json(data);
+
+			const recipeData = await Recipe.findOneAndUpdate(
+				{
+					_id: req.body.recipeId,
+				},
+				{ $pull: { userFavorites: data._id } },
+				{ new: true }
+			);
+
+			res.json(recipeData);
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ msg: error });
