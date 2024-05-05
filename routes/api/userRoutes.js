@@ -5,6 +5,7 @@ const {
 	getOneUser,
 	getUserFavorites,
 	createUser,
+	updateUser,
 	authenticateUser,
 	favoriteRecipe,
 	unfavoriteRecipe,
@@ -19,7 +20,7 @@ const tokenAuth = require('../../middleware/tokenAuth');
 router.route('/').get(getUsers).post(createUser);
 
 // /api/users/:userId
-router.route('/:userId').get(getOneUser);
+router.route('/:userId').get(getOneUser).put(updateUser);
 
 router
 	.route('/:userId/favorites')

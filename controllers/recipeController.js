@@ -2,11 +2,46 @@ const { Recipe, User } = require('../models');
 // const jwt = require('jsonwebtoken');
 // const tokenAuth = require('../middleware/tokenAuth');
 
+async function sortRecipesByFav() {
+	try {
+		const sortedRecipes = await Recipe.aggregate([
+			{
+				$match: { userFavorites: { $exists: true, $ne: [] } },
+			},
+			{
+				$addFields: {
+					userFavCount: { $size: '$userFavorites' },
+				},
+			},
+			{
+				$sort: { userFavCount: -1 },
+			},
+			{
+				$limit: 8,
+			},
+		]);
+		return sortedRecipes;
+	} catch (error) {
+		throw error;
+	}
+}
+
+async function populateUser(recipes) {
+	try {
+		await Recipe.populate(recipes, { path: 'user', select: 'username' });
+		return recipes;
+	} catch (error) {
+		throw error;
+	}
+}
+
 module.exports = {
 	async getRecipes(req, res) {
 		try {
-			const recipes = await Recipe.find();
-			res.status(200).json(recipes);
+			// const recipes = await Recipe.find();
+			const recipes = await sortRecipesByFav();
+			const populateRecipes = await populateUser(recipes);
+			res.status(200).json(populateRecipes);
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
