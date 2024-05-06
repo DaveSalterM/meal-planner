@@ -15,8 +15,26 @@ const userSchema = new Schema({
 		max_length: 30,
 	},
 	recipes: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
-	meal_plan: [],
-	shopping_list: [],
+
+	meal_plan: {
+		type: [
+			{
+				day: String, // Day of the week
+				recipes: [{ type: Schema.Types.ObjectId, ref: 'recipe' }], // Array of recipe IDs
+			},
+		],
+		default: [
+			{ day: 'Sunday', recipes: [] },
+			{ day: 'Monday', recipes: [] },
+			{ day: 'Tuesday', recipes: [] },
+			{ day: 'Wednesday', recipes: [] },
+			{ day: 'Thursday', recipes: [] },
+			{ day: 'Friday', recipes: [] },
+			{ day: 'Saturday', recipes: [] },
+		],
+	},
+
+	shopping_list: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
 	reviews: [{ type: Schema.Types.ObjectId, ref: 'review' }],
 	favorites: [{ type: Schema.Types.ObjectId, ref: 'recipe' }],
 });

@@ -2,11 +2,46 @@ const { Recipe, User } = require('../models');
 // const jwt = require('jsonwebtoken');
 // const tokenAuth = require('../middleware/tokenAuth');
 
+async function sortRecipesByFav() {
+	try {
+		const sortedRecipes = await Recipe.aggregate([
+			{
+				$match: { userFavorites: { $exists: true, $ne: [] } },
+			},
+			{
+				$addFields: {
+					userFavCount: { $size: '$userFavorites' },
+				},
+			},
+			{
+				$sort: { userFavCount: -1 },
+			},
+			{
+				$limit: 8,
+			},
+		]);
+		return sortedRecipes;
+	} catch (error) {
+		throw error;
+	}
+}
+
+async function populateUser(recipes) {
+	try {
+		await Recipe.populate(recipes, { path: 'user', select: 'username' });
+		return recipes;
+	} catch (error) {
+		throw error;
+	}
+}
+
 module.exports = {
 	async getRecipes(req, res) {
 		try {
-			const recipes = await Recipe.find();
-			res.status(200).json(recipes);
+			// const recipes = await Recipe.find();
+			const recipes = await sortRecipesByFav();
+			const populateRecipes = await populateUser(recipes);
+			res.status(200).json(populateRecipes);
 		} catch (error) {
 			console.log(error);
 			res.status(500).json(error);
@@ -16,7 +51,7 @@ module.exports = {
 	async getRecipeByName(req, res) {
 		try {
 			const recipe = await Recipe.find({
-				name: { $regex: req.body.name, $options: 'i' },
+				name: { $regex: req.params.recipe, $options: 'i' },
 			}).populate({
 				path: 'user',
 				select: 'username',
@@ -41,10 +76,12 @@ module.exports = {
 				},
 				{
 					path: 'reviews',
+					options: { sort: { createdAt: -1 } },
 					select: ['_id', 'content', 'user'],
 					populate: { path: 'user', select: ['_id', 'username'] },
 				},
 			]);
+			// console.log(recipe);
 			res.json(recipe);
 		} catch (error) {
 			console.log(error);
@@ -58,6 +95,7 @@ module.exports = {
 				ingredients: req.body.ingredients,
 				instructions: req.body.instructions,
 				calories: req.body.calories,
+				servings: req.body.servings,
 				imgUrl: req.body.imgUrl,
 				user: req.user.id,
 			});
@@ -87,7 +125,10 @@ module.exports = {
 				{
 					name: req.body.name,
 					ingredients: req.body.ingredients,
+					instructions: req.body.instructions,
 					calories: req.body.calories,
+					servings: req.body.servings,
+					imgUrl: req.body.imgUrl,
 				},
 				{ runValidators: true, new: true }
 			);
